@@ -1,0 +1,32 @@
+POST http://localhost:8080/sign-in
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email":"vchabanenko219@gmail.com",
+  "password":"default_default"
+}
+
+###
+
+POST http://localhost:8080/sign-up
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email":"vchabanenko219@gmail.com",
+  "firstName":"Vladimir",
+  "lastName":"Chabanenko",
+  "password":"default_default"
+}
+
+<> 2020-02-14T085507.200.json
+<> 2020-02-13T015248.200.json
+
+###
+//It'll be failed
+GET  http://localhost:8085/greeting
+Content-Type: application/json
+Accept:  application/json
+
+###
