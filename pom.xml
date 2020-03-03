@@ -4,18 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <groupId>com.softserve</groupId>
     <artifactId>security_service</artifactId>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-parent</artifactId>
-            <version>2.2.5.RELEASE</version>
-        </dependency>
-    </dependencies>
+    <version>1.0</version>
+    <packaging>pom</packaging>
 
     <modules>
-        <module>custom_starter</module>
+        <module>spring_security_starter</module>
         <module>sec_service</module>
     </modules>
 
