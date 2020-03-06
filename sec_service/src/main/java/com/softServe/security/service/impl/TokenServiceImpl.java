@@ -42,8 +42,6 @@ public class TokenServiceImpl implements TokenService {
     private PrivateKey privateKey;
     private RSAPublicKey publicKey;
 
-    // TODO: 27.02.20 Add ip claim
-
     @Autowired
     public TokenServiceImpl(PrivateKey privateKey, RSAPublicKey publicKey) {
         this.privateKey = privateKey;

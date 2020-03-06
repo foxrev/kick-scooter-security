@@ -19,11 +19,3 @@ spring:
 
   liquibase:
     change-log: classpath:db/changelog/master.xml
-
-  security:
-    oauth2:
-      client:
-        registration:
-          github:
-            clientId: eeacf48e0e78395ff9d2
-            clientSecret: 2f153b8c518a841b2039cad37851111f80ed56ab

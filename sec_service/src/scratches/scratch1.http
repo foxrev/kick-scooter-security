@@ -3,8 +3,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "email":"vchabanenko219@gmail.com",
-  "password":"default_default"
+  "email":"admin@gmail.com",
+  "password":"password1"
 }
 
 ###
@@ -14,10 +14,10 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "email":"vchabanenko219@gmail.com",
-  "firstName":"Vladimir",
-  "lastName":"Chabanenko",
-  "password":"default_default"
+  "email":"admin@gmail.com",
+  "firstName":"admin",
+  "lastName":"admin",
+  "password":"password1"
 }
 
 <> 2020-02-14T085507.200.json
