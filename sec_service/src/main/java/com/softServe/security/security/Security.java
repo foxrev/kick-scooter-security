@@ -1,11 +1,13 @@
 package com.softServe.security.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.softServe.security.model.AppUser;
 import com.softServe.security.service.TokenService;
 import com.softServe.security.service.impl.UserDetailsServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.PrincipalExtractor;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.config.Customizer;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -14,10 +16,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 
+@Configuration
 @EnableWebSecurity
+@EnableOAuth2Sso
 public class Security extends WebSecurityConfigurerAdapter {
 
     private final ObjectMapper objectMapper;
@@ -26,7 +28,6 @@ public class Security extends WebSecurityConfigurerAdapter {
     private TokenService tokenService;
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
     public Security(UserDetailsServiceImpl userDetailsService, PasswordEncoder passwordEncoder,
                     TokenService tokenService, ObjectMapper objectMapper) {
         this.userDetailsService = userDetailsService;
@@ -37,14 +38,18 @@ public class Security extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable().authorizeRequests()
-                .antMatchers("/sign-up", "/sign-in").permitAll()
+        http.cors().and().csrf().disable()
+                .antMatcher("/**")
+                .authorizeRequests()
+                .antMatchers("/", "/login**","/callback/", "/webjars/**", "/error**","/sign-in", "/sign-up")
+                .permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new AuthenticationFilter(authenticationManager(),tokenService, objectMapper))
                 .addFilter(new AuthorizationFilter(authenticationManager(),tokenService))
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().oauth2Login();
+                .and()
+                .oauth2Login();
     }
 
     @Override
@@ -60,5 +65,12 @@ public class Security extends WebSecurityConfigurerAdapter {
                 "/configuration/security",
                 "/swagger-ui.html",
                 "/webjars/**");
+    }
+//todo fix that
+    @Bean
+    public PrincipalExtractor principalExtractor(){
+        return map -> {
+            return new AppUser();
+        };
     }
 }

@@ -1,5 +1,6 @@
 package com.softServe.security.configuration;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
@@ -12,10 +13,15 @@ import org.springframework.security.oauth2.core.oidc.IdTokenClaimNames;
 @Configuration
 public class OAuth2LoginConfig {
 
+    @Value("${google.client-id}")
+    private String clientId;
+    @Value("${google.client-secret}")
+    private String clientSecret;
+
     private ClientRegistration googleClientRegistration(){
         return ClientRegistration.withRegistrationId("google")
-                .clientId("554687050569-dre6dq0083v274mno87j2eionp5pbpta.apps.googleusercontent.com")
-                .clientSecret("Dgby-1F5r0BMPBmhmpDzr42V")
+                .clientId(clientId)
+                .clientSecret(clientSecret)
                 .clientAuthenticationMethod(ClientAuthenticationMethod.BASIC)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .redirectUriTemplate("{baseUrl}/login/oauth2/code/{registrationId}")
@@ -26,6 +32,7 @@ public class OAuth2LoginConfig {
                 .userNameAttributeName(IdTokenClaimNames.SUB)
                 .jwkSetUri("https://www.googleapis.com/oauth2/v3/certs")
                 .clientName("Google")
+                .scope("profile")
                 .build();
     }
 

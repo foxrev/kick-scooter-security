@@ -1,5 +1,6 @@
 package com.softServe.security.controller;
 
+import com.softServe.security.exception.AuthorizationException;
 import com.softServe.security.model.AppUser;
 import com.softServe.security.model.UserSignInRequest;
 import com.softServe.security.model.UserSignUpRequest;
@@ -9,9 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.ServletException;
 
 @RestController
 public class UserController {
@@ -19,33 +23,31 @@ public class UserController {
     private UserService userService;
     private TokenService tokenService;
 
-    @Autowired
     public UserController(UserService userService, TokenService tokenService) {
         this.userService = userService;
         this.tokenService = tokenService;
     }
 
+    //http://localhost:8080/oauth2/authorization/google - google auth URL
+
     @PostMapping("/sign-up")
-    public ResponseEntity<Void> signUp(@RequestBody UserSignUpRequest request) {
-        try {
-            AppUser user = userService.signUp(request);
-            HttpHeaders header = new HttpHeaders();
-            header.add("Authorization", tokenService.createToken(user.getEmail(), user.getRoles()));
-            return new ResponseEntity<>(header, HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return ResponseEntity.status(500).build();
-        }
+    public ResponseEntity<Void> signUp(@RequestBody UserSignUpRequest request) throws AuthorizationException, ServletException {
+        AppUser user = userService.signUp(request);
+        HttpHeaders header = new HttpHeaders();
+        header.add("Authorization", tokenService.createToken(user.getEmail(), user.getRoles()));
+        return new ResponseEntity<>(header, HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("/sign-in")
-    public ResponseEntity<Void> signIn(@RequestBody UserSignInRequest request) {
-        try {
-            AppUser user = userService.signIn(request);
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Authorization", tokenService.createToken(user.getEmail(), user.getRoles()));
-            return new ResponseEntity(headers, HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return ResponseEntity.status(500).build();
-        }
+    public ResponseEntity<Void> signIn(@RequestBody UserSignInRequest request) throws AuthorizationException, ServletException {
+        AppUser user = userService.signIn(request);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", tokenService.createToken(user.getEmail(), user.getRoles()));
+        return new ResponseEntity(headers, HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/")
+    public String welcome(){
+        return "Hello World";
     }
 }

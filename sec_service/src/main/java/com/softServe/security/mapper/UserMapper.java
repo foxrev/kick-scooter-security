@@ -1,8 +1,8 @@
 package com.softServe.security.mapper;
 
-import com.softServe.security.model.UserSignUpRequest;
 import com.softServe.security.model.AppUser;
 import com.softServe.security.model.Roles;
+import com.softServe.security.model.UserSignUpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;

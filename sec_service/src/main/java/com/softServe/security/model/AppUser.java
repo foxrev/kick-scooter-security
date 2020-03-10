@@ -11,7 +11,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -49,5 +50,5 @@ public class AppUser {
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     @Fetch(FetchMode.SUBSELECT)
-    private Collection<Roles> roles;
+    private Set<Roles> roles;
 }

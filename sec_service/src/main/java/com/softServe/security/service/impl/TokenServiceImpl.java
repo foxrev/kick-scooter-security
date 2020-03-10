@@ -56,7 +56,7 @@ public class TokenServiceImpl implements TokenService {
             JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
                     .subject(email)
                     .issuer(host)
-                    .claim("role", new ObjectMapper().writeValueAsString(roles))
+                    .claim("role", new ObjectMapper().writeValueAsString(roles.toArray()[0]))
                     .expirationTime(Date.from(Instant.now().plus(expiration, ChronoUnit.MINUTES)))
                     .build();
 

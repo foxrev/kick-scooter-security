@@ -17,5 +17,9 @@ spring:
     username: ${SQL_USERNAME}
     password: ${SQL_PASSWORD}
 
+google:
+  client-id: ${CLIENT_ID}
+  client-secret: ${CLIENT_SECRET}
+
   liquibase:
     change-log: classpath:db/changelog/master.xml
