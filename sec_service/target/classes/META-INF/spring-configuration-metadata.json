@@ -1,0 +1,52 @@
+{
+  "groups": [
+    {
+      "name": "google",
+      "type": "com.softServe.security.configuration.GoogleConfigurationProperties",
+      "sourceType": "com.softServe.security.configuration.GoogleConfigurationProperties"
+    },
+    {
+      "name": "key",
+      "type": "com.softServe.security.configuration.KeyConfigurationProperties",
+      "sourceType": "com.softServe.security.configuration.KeyConfigurationProperties"
+    },
+    {
+      "name": "token",
+      "type": "com.softServe.security.configuration.TokenServiceConfigProperties",
+      "sourceType": "com.softServe.security.configuration.TokenServiceConfigProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "google.client-id",
+      "type": "java.lang.String",
+      "sourceType": "com.softServe.security.configuration.GoogleConfigurationProperties"
+    },
+    {
+      "name": "google.client-secret",
+      "type": "java.lang.String",
+      "sourceType": "com.softServe.security.configuration.GoogleConfigurationProperties"
+    },
+    {
+      "name": "key.private-key-path",
+      "type": "org.springframework.core.io.Resource",
+      "sourceType": "com.softServe.security.configuration.KeyConfigurationProperties"
+    },
+    {
+      "name": "key.public-key-path",
+      "type": "org.springframework.core.io.Resource",
+      "sourceType": "com.softServe.security.configuration.KeyConfigurationProperties"
+    },
+    {
+      "name": "token.expiration",
+      "type": "java.lang.Long",
+      "sourceType": "com.softServe.security.configuration.TokenServiceConfigProperties"
+    },
+    {
+      "name": "token.host",
+      "type": "java.lang.String",
+      "sourceType": "com.softServe.security.configuration.TokenServiceConfigProperties"
+    }
+  ],
+  "hints": []
+}

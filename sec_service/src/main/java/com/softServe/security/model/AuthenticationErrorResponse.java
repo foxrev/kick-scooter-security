@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @Setter
 @Builder
 public class AuthenticationErrorResponse {
-
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime time;
     private int status;

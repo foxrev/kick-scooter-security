@@ -3,7 +3,7 @@ package com.softServe.security.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.softServe.security.model.UserSignInRequest;
 import com.softServe.security.service.TokenService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,19 +16,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 
+@RequiredArgsConstructor
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    private AuthenticationManager authenticationManager;
-    private TokenService tokenService;
+    private final AuthenticationManager authenticationManager;
+    private final TokenService tokenService;
     private final ObjectMapper objectMapper;
-
-    @Autowired
-    public AuthenticationFilter(AuthenticationManager authenticationManager, TokenService tokenService, ObjectMapper objectMapper) {
-        this.authenticationManager = authenticationManager;
-        this.tokenService = tokenService;
-        this.objectMapper = objectMapper;
-    }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
@@ -39,7 +34,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
             return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(),
                     user.getPassword(), null));
         }catch (IOException e){
-            throw new RuntimeException(e);
+            throw new UncheckedIOException(e);
         }
 
     }

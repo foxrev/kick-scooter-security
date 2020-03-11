@@ -1,5 +1,6 @@
 package com.softServe.security.configuration;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,17 +12,15 @@ import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.core.oidc.IdTokenClaimNames;
 
 @Configuration
+@RequiredArgsConstructor
 public class OAuth2LoginConfig {
 
-    @Value("${google.client-id}")
-    private String clientId;
-    @Value("${google.client-secret}")
-    private String clientSecret;
+    private final GoogleConfigurationProperties googleConfigurationProperties;
 
     private ClientRegistration googleClientRegistration(){
         return ClientRegistration.withRegistrationId("google")
-                .clientId(clientId)
-                .clientSecret(clientSecret)
+                .clientId(googleConfigurationProperties.getClientId())
+                .clientSecret(googleConfigurationProperties.getClientSecret())
                 .clientAuthenticationMethod(ClientAuthenticationMethod.BASIC)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .redirectUriTemplate("{baseUrl}/login/oauth2/code/{registrationId}")

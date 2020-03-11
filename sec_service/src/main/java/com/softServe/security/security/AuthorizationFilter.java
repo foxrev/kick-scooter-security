@@ -23,7 +23,6 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
 
     private TokenService tokenService;
 
-    @Autowired
     public AuthorizationFilter(AuthenticationManager authenticationManager, TokenService tokenService) {
         super(authenticationManager);
         this.tokenService = tokenService;
@@ -48,8 +47,6 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
         }catch (ParseException e){
             chain.doFilter(request, response);
         }
-
-        //todo add email verification
 
         try {
             SecurityContextHolder.getContext().setAuthentication((tokenService.parse(token.substring(7))));

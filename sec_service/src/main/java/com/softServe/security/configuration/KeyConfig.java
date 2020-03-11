@@ -1,5 +1,6 @@
 package com.softServe.security.configuration;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,13 +17,14 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
 @Configuration
+@RequiredArgsConstructor
 public class KeyConfig {
 
-    @Bean
-    public PrivateKey getPrivateKey(@Value("${key.privateKeyPath}") String path) throws Exception {
-        Resource resource = new ClassPathResource(path);
-        byte[] bytes = Files.readAllBytes(Paths.get(resource.getURI()));
+    private final KeyConfigurationProperties keyConfigurationProperties;
 
+    @Bean
+    public PrivateKey getPrivateKey() throws Exception {
+        byte[] bytes = Files.readAllBytes(Paths.get(keyConfigurationProperties.getPrivateKeyPath().getURI()));
 
         PKCS8EncodedKeySpec spec =
                 new PKCS8EncodedKeySpec(bytes);
@@ -31,9 +33,8 @@ public class KeyConfig {
     }
 
     @Bean
-    public RSAPublicKey getPublicKey(@Value("${key.publicKeyPath}") String path) throws Exception {
-        Resource resource = new ClassPathResource(path);
-        byte[] keyBytes = Files.readAllBytes(Paths.get(resource.getURI()));
+    public RSAPublicKey getPublicKey() throws Exception {
+        byte[] keyBytes = Files.readAllBytes(Paths.get(keyConfigurationProperties.getPublicKeyPath().getURI()));
 
         X509EncodedKeySpec spec =
                 new X509EncodedKeySpec(keyBytes);

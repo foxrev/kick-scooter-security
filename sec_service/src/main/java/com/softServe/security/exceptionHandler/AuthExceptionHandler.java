@@ -19,10 +19,10 @@ public class AuthExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<AuthenticationErrorResponse> authExceptionHandler(Exception e, WebRequest request){
         AuthenticationErrorResponse errorResponse = AuthenticationErrorResponse.builder()
                                                 .time(LocalDateTime.now())
-                                                .status(HttpStatus.NOT_ACCEPTABLE.value())
+                                                .status(HttpStatus.UNAUTHORIZED.value())
                                                 .error(e.getMessage())
                                                 .build();
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_ACCEPTABLE);
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(ServletException.class)

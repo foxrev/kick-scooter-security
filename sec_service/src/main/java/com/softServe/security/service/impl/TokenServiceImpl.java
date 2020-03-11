@@ -1,63 +1,44 @@
 package com.softServe.security.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.*;
-import com.nimbusds.jose.crypto.RSASSASigner;
-import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import com.softServe.security.configuration.TokenServiceConfigProperties;
 import com.softServe.security.model.Roles;
 import com.softServe.security.security.AuthenticationImpl;
 import com.softServe.security.service.TokenService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletException;
-import java.security.PrivateKey;
-import java.security.interfaces.RSAPublicKey;
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class TokenServiceImpl implements TokenService {
 
-    //Add vault
-    @Value("${host.name}")
-    private String host;
-
-    @Value("${token.expiration}")
-    private Long expiration;
-
+    private final TokenServiceConfigProperties tokenServiceConfigProperties;
     private final JWSSigner signer;
-
     private final JWSVerifier verifier;
-
-    private PrivateKey privateKey;
-    private RSAPublicKey publicKey;
-
-    @Autowired
-    public TokenServiceImpl(PrivateKey privateKey, RSAPublicKey publicKey) {
-        this.privateKey = privateKey;
-        this.publicKey = publicKey;
-        signer = new RSASSASigner(privateKey);
-        verifier = new RSASSAVerifier(publicKey);
-    }
 
     @Override
     public String createToken(String email, Collection<? extends GrantedAuthority> roles) throws ServletException {
         try {
             JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
                     .subject(email)
-                    .issuer(host)
-                    .claim("role", new ObjectMapper().writeValueAsString(roles.toArray()[0]))
-                    .expirationTime(Date.from(Instant.now().plus(expiration, ChronoUnit.MINUTES)))
+                    .issuer(tokenServiceConfigProperties.getHost())
+                    .claim("role", roles.toArray()[0])
+                    .expirationTime(Date.from(Instant.now().plus(tokenServiceConfigProperties.getExpiration(),
+                            ChronoUnit.MINUTES)))
                     .build();
 
             SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.RS256), claimsSet);
@@ -65,7 +46,7 @@ public class TokenServiceImpl implements TokenService {
             signedJWT.sign(signer);
 
             return "Bearer " + signedJWT.serialize();
-        }catch (JOSEException | JsonProcessingException e){
+        }catch (JOSEException e){
             throw new ServletException(e);
         }
     }

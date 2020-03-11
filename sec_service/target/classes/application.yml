@@ -1,15 +1,13 @@
 server:
   port: 8080
 
-host:
-  name: localhost
-
 token:
+  host: localhost
   expiration: 45
 
 key:
-  privateKeyPath: keys/private_key.der
-  publicKeyPath: keys/public_key.der
+  privateKeyPath: classpath:keys/private_key.der
+  publicKeyPath: classpath:keys/public_key.der
 
 spring:
   datasource:
@@ -17,18 +15,9 @@ spring:
     username: ${SQL_USERNAME}
     password: ${SQL_PASSWORD}
 
-#  oauth2:
-#    client:
-#      clientId: 554687050569-dre6dq0083v274mno87j2eionp5pbpta.apps.googleusercontent.com
-#      clientSecret: Dgby-1F5r0BMPBmhmpDzr42V
-#      accessTokenUri: https://www.googleapis.com/oauth2/v4/token
-#      userAuthorizationUri: https://accounts.google.com/o/oauth2/v2/auth
-#      clientAuthenticationScheme: form
-#      scope: openid, email,profile
-#    resource:
-#      userInfoUri: https://www.googleapis.com/oauth2/v3/userinfo
-#      preferTokenInfo: true
-
-
   liquibase:
     change-log: classpath:db/changelog/master.xml
+
+google:
+  client-id: ${CLIENT_ID}
+  client-secret: ${CLIENT_SECRET}

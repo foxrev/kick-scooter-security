@@ -6,7 +6,7 @@ import com.softServe.security.model.UserSignInRequest;
 import com.softServe.security.model.UserSignUpRequest;
 import com.softServe.security.service.TokenService;
 import com.softServe.security.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,15 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.ServletException;
 
 @RestController
+@RequiredArgsConstructor
 public class UserController {
 
-    private UserService userService;
-    private TokenService tokenService;
-
-    public UserController(UserService userService, TokenService tokenService) {
-        this.userService = userService;
-        this.tokenService = tokenService;
-    }
+    private final UserService userService;
+    private final TokenService tokenService;
 
     //http://localhost:8080/oauth2/authorization/google - google auth URL
 
