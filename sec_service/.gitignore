@@ -26,6 +26,8 @@
 .gradle/
 .settings/
 .project
+.mvn
+src/scratches
 .classpath
 out/
 /bin/
