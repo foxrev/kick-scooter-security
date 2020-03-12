@@ -41,14 +41,9 @@ public class UserServiceImpl implements UserService {
     public AppUser signIn(UserSignInRequest request) throws AuthorizationException {
         AppUser user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new AuthorizationException("Email wrong or doesn't exist"));
-        if(passwordMather(request.getPassword(), user.getPassword())){
+        if(passwordEncoder.matches(request.getPassword(), user.getPassword())){
             return user;
         }
         throw new AuthorizationException("Incorrect password");
-    }
-
-
-    public boolean passwordMather(String comparedPassword, String referencePassword){
-        return passwordEncoder.matches(comparedPassword, referencePassword);
     }
 }
