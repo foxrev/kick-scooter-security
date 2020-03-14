@@ -1,43 +1,47 @@
 package com.softServe.security.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.softServe.security.repository.UserRepository;
 import com.softServe.security.service.TokenService;
 import com.softServe.security.service.impl.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class Security extends WebSecurityConfigurerAdapter {
 
     private final ObjectMapper objectMapper;
     private final UserDetailsService userDetailsService;
     private final TokenService tokenService;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
-                .antMatcher("/**")
                 .authorizeRequests()
-                .antMatchers("/", "/login**","/callback/", "/webjars/**", "/error**","/sign-in", "/sign-up")
+                .antMatchers("/admin/*").hasRole("ADMIN")
+                .antMatchers("/sign-in", "/sign-up")
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new AuthenticationFilter(authenticationManager(),tokenService, objectMapper))
-                .addFilter(new AuthorizationFilter(authenticationManager(),tokenService))
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .oauth2Login();
+                .addFilter(new AuthorizationFilter(authenticationManager(),tokenService, userRepository))
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Override

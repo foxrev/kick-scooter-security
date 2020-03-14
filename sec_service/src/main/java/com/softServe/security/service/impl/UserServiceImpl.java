@@ -1,16 +1,21 @@
 package com.softServe.security.service.impl;
 
 import com.softServe.security.exception.AuthorizationException;
-import com.softServe.security.mapper.UserMapper;
+import com.softServe.security.converter.UserMapper;
 import com.softServe.security.model.AppUser;
 import com.softServe.security.model.UserSignInRequest;
 import com.softServe.security.model.UserSignUpRequest;
 import com.softServe.security.repository.UserRepository;
 import com.softServe.security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.sql.SQLException;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -45,5 +50,16 @@ public class UserServiceImpl implements UserService {
             return user;
         }
         throw new AuthorizationException("Incorrect password");
+    }
+
+    @Override
+    @Transactional
+    public long blockUser(Long id){
+        int resultOfUpdating = userRepository.updateBlockedStatus(id);
+        if(resultOfUpdating == 0){
+            throw new UsernameNotFoundException("User with the id " + id + " doesn't exist");
+        }else{
+            return resultOfUpdating;
+        }
     }
 }

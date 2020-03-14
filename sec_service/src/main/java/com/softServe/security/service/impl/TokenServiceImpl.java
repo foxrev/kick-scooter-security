@@ -1,5 +1,6 @@
 package com.softServe.security.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.*;
@@ -29,6 +30,7 @@ public class TokenServiceImpl implements TokenService {
     private final TokenServiceConfigProperties tokenServiceConfigProperties;
     private final JWSSigner signer;
     private final JWSVerifier verifier;
+    private final ObjectMapper objectMapper;
 
     @Override
     public String createToken(String email, Collection<? extends GrantedAuthority> roles) throws ServletException {
@@ -36,7 +38,7 @@ public class TokenServiceImpl implements TokenService {
             JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
                     .subject(email)
                     .issuer(tokenServiceConfigProperties.getHost())
-                    .claim("role", roles.toArray()[0])
+                    .claim("role", objectMapper.writeValueAsString(roles))
                     .expirationTime(Date.from(Instant.now().plus(tokenServiceConfigProperties.getExpiration(),
                             ChronoUnit.MINUTES)))
                     .build();
@@ -46,7 +48,7 @@ public class TokenServiceImpl implements TokenService {
             signedJWT.sign(signer);
 
             return "Bearer " + signedJWT.serialize();
-        }catch (JOSEException e){
+        }catch (JOSEException | JsonProcessingException e){
             throw new ServletException(e);
         }
     }
@@ -54,6 +56,11 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public Date getExpirationTime(String token) throws ParseException {
         return SignedJWT.parse(token).getJWTClaimsSet().getExpirationTime();
+    }
+
+    @Override
+    public String getSubject(String token) throws ParseException {
+        return SignedJWT.parse(token).getJWTClaimsSet().getSubject();
     }
 
     @Override
@@ -69,9 +76,9 @@ public class TokenServiceImpl implements TokenService {
         JWTClaimsSet claimsSet = jwt.getJWTClaimsSet();
         if(jwt.verify(verifier)){
             String email = claimsSet.getSubject();
-            List<Roles> roles = new ObjectMapper()
-                    .readValue(((String) claimsSet.getClaim("role")), new TypeReference<List<Roles>>() {});
-            return AuthenticationImpl.builder()
+            //fix
+            List<Roles> roles = objectMapper.readValue(((String) claimsSet.getClaim("role")), new TypeReference<>() {});
+             return AuthenticationImpl.builder()
                     .email(email)
                     .roles(roles)
                     .authenticated(true)

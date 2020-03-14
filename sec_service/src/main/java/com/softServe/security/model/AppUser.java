@@ -24,6 +24,7 @@ public class AppUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "email")
@@ -38,10 +39,11 @@ public class AppUser {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "blocked_status")
+    @Column(name = "is_blocked")
     private boolean isBlocked;
 
     @CreatedDate
+    @Column(name = "created")
     private LocalDateTime created;
 
     @ElementCollection(fetch = FetchType.EAGER)

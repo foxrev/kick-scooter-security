@@ -16,6 +16,8 @@ public interface TokenService {
 
     Date getExpirationTime(String token) throws ParseException;
 
+    String getSubject(String token) throws ParseException;
+
     JWTClaimsSet getClaims(String token) throws ParseException;
 
     Authentication parse(String token) throws Exception;

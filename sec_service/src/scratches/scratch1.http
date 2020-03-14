@@ -24,9 +24,7 @@ Accept: application/json
 <> 2020-02-13T015248.200.json
 
 ###
-//It'll be failed
-GET  http://localhost:8080/greeting
+GET  http://localhost:8080/welcome
 Content-Type: application/json
 Accept:  application/json
-
 ###

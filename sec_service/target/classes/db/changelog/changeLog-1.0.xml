@@ -26,7 +26,7 @@
                 <constraints nullable="false"/>
             </column>
 
-            <column name="blocked_status" type="BOOLEAN" defaultValue="FALSE">
+            <column name="is_blocked" type="BOOLEAN" defaultValue="FALSE">
                 <constraints nullable="false"/>
             </column>
 

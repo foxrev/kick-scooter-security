@@ -1,10 +1,9 @@
-package com.softServe.security.mapper;
+package com.softServe.security.converter;
 
 import com.softServe.security.model.AppUser;
 import com.softServe.security.model.Roles;
 import com.softServe.security.model.UserSignUpRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +19,7 @@ public class UserMapper {
     public AppUser mapToUser(UserSignUpRequest request){
         AppUser appUser = new AppUser();
         Set<Roles> roles = new HashSet<>();
-        roles.add(Roles.ROLE_USER);
+        roles.add(Roles.USER);
         appUser.setEmail(request.getEmail());
         appUser.setFirstName(request.getFirstName());
         appUser.setLastName(request.getLastName());

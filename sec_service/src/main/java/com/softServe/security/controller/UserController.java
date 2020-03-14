@@ -1,21 +1,21 @@
 package com.softServe.security.controller;
 
+import com.softServe.security.converter.UserMapper;
 import com.softServe.security.exception.AuthorizationException;
 import com.softServe.security.model.AppUser;
 import com.softServe.security.model.UserSignInRequest;
 import com.softServe.security.model.UserSignUpRequest;
+import com.softServe.security.repository.UserRepository;
 import com.softServe.security.service.TokenService;
 import com.softServe.security.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
+import java.sql.SQLException;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,8 +23,8 @@ public class UserController {
 
     private final UserService userService;
     private final TokenService tokenService;
-
-    //http://localhost:8080/oauth2/authorization/google - google auth URL
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     @PostMapping("/sign-up")
     public ResponseEntity<Void> signUp(@RequestBody UserSignUpRequest request) throws AuthorizationException, ServletException {
@@ -42,8 +42,12 @@ public class UserController {
         return new ResponseEntity(headers, HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/")
-    public String welcome(){
-        return "Hello World";
+    @PutMapping("/admin/block/{id}")
+    public ResponseEntity<Long> blockUser(@PathVariable("id") Long user_id){
+        try {
+            return ResponseEntity.ok(userService.blockUser(user_id));
+        }catch (SQLException e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }
