@@ -76,8 +76,8 @@ public class TokenServiceImpl implements TokenService {
         JWTClaimsSet claimsSet = jwt.getJWTClaimsSet();
         if(jwt.verify(verifier)){
             String email = claimsSet.getSubject();
-            //fix
-            List<Roles> roles = objectMapper.readValue(((String) claimsSet.getClaim("role")), new TypeReference<>() {});
+            List<Roles> roles = objectMapper.readValue(((String) claimsSet.getClaim("role")),
+                    new TypeReference<>() {});
              return AuthenticationImpl.builder()
                     .email(email)
                     .roles(roles)

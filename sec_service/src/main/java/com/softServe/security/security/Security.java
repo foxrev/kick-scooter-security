@@ -22,7 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+//@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class Security extends WebSecurityConfigurerAdapter {
 
     private final ObjectMapper objectMapper;
@@ -35,8 +35,8 @@ public class Security extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/admin/*").hasRole("ADMIN")
-                .antMatchers("/sign-in", "/sign-up","/")
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/sign-in", "/sign-up")
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()

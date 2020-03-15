@@ -34,7 +34,7 @@ public class AuthenticationImpl implements Authentication {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return new ArrayList<>();
+        return roles;
     }
 
     @Override
