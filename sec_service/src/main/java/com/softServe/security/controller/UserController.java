@@ -1,11 +1,9 @@
 package com.softServe.security.controller;
 
-import com.softServe.security.converter.UserMapper;
 import com.softServe.security.exception.AuthorizationException;
 import com.softServe.security.model.AppUser;
 import com.softServe.security.model.UserSignInRequest;
 import com.softServe.security.model.UserSignUpRequest;
-import com.softServe.security.repository.UserRepository;
 import com.softServe.security.service.TokenService;
 import com.softServe.security.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +21,6 @@ public class UserController {
 
     private final UserService userService;
     private final TokenService tokenService;
-    private final UserRepository userRepository;
-    private final UserMapper userMapper;
 
     @PostMapping("/sign-up")
     public ResponseEntity<Void> signUp(@RequestBody UserSignUpRequest request) throws AuthorizationException, ServletException {
@@ -42,12 +38,8 @@ public class UserController {
         return new ResponseEntity(headers, HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("/admin/block/{id}")
-    public ResponseEntity<Long> blockUser(@PathVariable("id") Long user_id){
-        try {
-            return ResponseEntity.ok(userService.blockUser(user_id));
-        }catch (SQLException e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+    @PutMapping("/admin/block/{email}")
+    public ResponseEntity<Long> blockUser(@PathVariable("email") String userEmail) throws SQLException {
+        return ResponseEntity.ok(userService.blockUser(userEmail));
     }
 }

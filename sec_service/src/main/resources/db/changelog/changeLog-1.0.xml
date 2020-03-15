@@ -6,7 +6,7 @@
     <changeSet id="1.0" author="Vladimir">
         <createTable tableName="users">
 
-            <column name="id" type="BIGINT" autoIncrement="true">
+            <column name="id" type="UUID">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
 
@@ -38,7 +38,7 @@
 
     <changeSet id="create_role_table" author="Vladimir">
         <createTable tableName="user_roles">
-            <column name="user_id" type="BIGINT">
+            <column name="user_id" type="UUID">
                 <constraints nullable="false"/>
             </column>
 

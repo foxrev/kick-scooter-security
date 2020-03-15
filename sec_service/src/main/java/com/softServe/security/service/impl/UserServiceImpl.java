@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -54,10 +55,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public long blockUser(Long id){
-        int resultOfUpdating = userRepository.updateBlockedStatus(id);
+    public long blockUser(String email){
+        int resultOfUpdating = userRepository.updateBlockedStatus(email);
         if(resultOfUpdating == 0){
-            throw new UsernameNotFoundException("User with the id " + id + " doesn't exist");
+            throw new UsernameNotFoundException("User with the id " + email + " doesn't exist");
         }else{
             return resultOfUpdating;
         }

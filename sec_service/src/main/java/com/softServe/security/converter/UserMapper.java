@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -20,6 +21,7 @@ public class UserMapper {
         AppUser appUser = new AppUser();
         Set<Roles> roles = new HashSet<>();
         roles.add(Roles.USER);
+        appUser.setId(UUID.randomUUID());
         appUser.setEmail(request.getEmail());
         appUser.setFirstName(request.getFirstName());
         appUser.setLastName(request.getLastName());

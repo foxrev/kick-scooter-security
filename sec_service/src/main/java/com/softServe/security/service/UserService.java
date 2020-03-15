@@ -6,9 +6,10 @@ import com.softServe.security.model.UserSignInRequest;
 import com.softServe.security.model.UserSignUpRequest;
 
 import java.sql.SQLException;
+import java.util.UUID;
 
 public interface UserService {
     AppUser signUp(UserSignUpRequest request) throws AuthorizationException;
     AppUser signIn(UserSignInRequest request) throws AuthorizationException;
-    long blockUser(Long id) throws SQLException;
+    long blockUser(String email) throws SQLException;
 }

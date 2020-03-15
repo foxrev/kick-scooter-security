@@ -6,8 +6,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface UserRepository extends JpaRepository<AppUser, Long> {
     Optional<AppUser> findByEmail(String email);
@@ -15,6 +15,6 @@ public interface UserRepository extends JpaRepository<AppUser, Long> {
     boolean existsByEmail(String email);
     @Transactional
     @Modifying
-    @Query("update AppUser u set u.isBlocked=true where u.id = ?1")
-    int updateBlockedStatus(Long id);
+    @Query("update AppUser u set u.isBlocked=true where u.email = ?1")
+    int updateBlockedStatus(String email);
 }
